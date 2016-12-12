@@ -20,6 +20,8 @@ import java.net.URLConnection;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -33,7 +35,6 @@ public class MainGui extends JFrame {
 	private static final long serialVersionUID = -4115751417721782411L;
 	private Thread worker;
 	private final String root = "update/";
-	
 
 	private JTextArea outText;
 	private JButton cancle;
@@ -49,9 +50,9 @@ public class MainGui extends JFrame {
 	}
 
 	private void initComponents() {
-
+		setTitle("Update");
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
+		setIconImage(new ImageIcon(getClass().getResource("/image/templex-updater-big.png")).getImage());
 		pan1 = new JPanel();
 		pan1.setLayout(new BorderLayout());
 
@@ -97,7 +98,7 @@ public class MainGui extends JFrame {
 				try {
 					downloadFile(getDownloadLinkFromHost());
 					unzip();
-					copyFiles(new File(root), new File("").getAbsolutePath());
+					copyFiles(new File(root), new File("..").getAbsolutePath());
 					cleanup();
 					launch.setEnabled(true);
 					cancle.setText("Close Window");
@@ -113,7 +114,7 @@ public class MainGui extends JFrame {
 
 	private void launch() {
 		// String[] run = { "java", "-jar", "update app.jar" };
-		String[] cmdArray = new String[] { "cmd.exe", "/c", "JobsParser.exe" };
+		String[] cmdArray = new String[] { "../JobsParser.exe" };
 		try {
 			Runtime.getRuntime().exec(cmdArray);
 		} catch (Exception ex) {
@@ -246,6 +247,12 @@ public class MainGui extends JFrame {
 	}
 
 	public static void main(String args[]) {
+
+		if (args.length != 1 || !args[0].equals("-update")) {
+			System.out.println("Usage:\n" + "ua.pp.hak.MainGui update\n");
+			return;
+		}
+
 		// change look and feel
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
