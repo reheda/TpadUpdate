@@ -35,6 +35,7 @@ public class MainGui extends JFrame {
 	private static final long serialVersionUID = -4115751417721782411L;
 	private Thread worker;
 	private final String root = "update/";
+	private String fileNameToStart;
 
 	private JTextArea outText;
 	private JButton cancle;
@@ -43,7 +44,8 @@ public class MainGui extends JFrame {
 	private JPanel pan1;
 	private JPanel pan2;
 
-	public MainGui() {
+	public MainGui(String fileName) {
+		this.fileNameToStart = fileName;
 		initComponents();
 		outText.setText("Contacting Download Server...");
 		download();
@@ -114,7 +116,7 @@ public class MainGui extends JFrame {
 
 	private void launch() {
 		// String[] run = { "java", "-jar", "update app.jar" };
-		String[] cmdArray = new String[] { "../JobsParser.exe" };
+		String[] cmdArray = new String[] { "../" + fileNameToStart };
 		try {
 			Runtime.getRuntime().exec(cmdArray);
 		} catch (Exception ex) {
@@ -248,8 +250,8 @@ public class MainGui extends JFrame {
 
 	public static void main(String args[]) {
 
-		if (args.length != 1 || !args[0].equals("-update")) {
-			System.out.println("Usage:\n" + "ua.pp.hak.MainGui update\n");
+		if (args.length != 2 || !args[0].equals("-update")) {
+			System.out.println("Usage:\n" + "ua.pp.hak.MainGui -update FileNameToStart.exe\n");
 			return;
 		}
 
@@ -261,7 +263,7 @@ public class MainGui extends JFrame {
 		}
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				new MainGui().setVisible(true);
+				new MainGui(args[1]).setVisible(true);
 			}
 		});
 	}
